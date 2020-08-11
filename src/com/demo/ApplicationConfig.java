@@ -1,7 +1,8 @@
 package com.demo;
 
+import com.demo.exceptions.ConfigFileException;
+
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.Properties;
@@ -28,8 +29,11 @@ public class ApplicationConfig {
             this.numberOfTimePeriods = Integer.parseInt(prop.getProperty("number_of_time_periods"));
             this.columnIndexOfClosingPrice = Integer.parseInt(prop.getProperty("column_index_of_closing_price"));
             this.outputFilePath = prop.getProperty("output_file_path");
-            inputStream.close();
 
+            if (this.numberOfTimePeriods <= 0) throw new ConfigFileException("Number of time periods must be a positive number");
+            if (this.columnIndexOfClosingPrice <= 0) throw new ConfigFileException("Column index of Closing Price must be a positive number");
+
+            inputStream.close();
         } catch (Exception e) {
             System.out.println("Config file error: " + e.getMessage());
         }
